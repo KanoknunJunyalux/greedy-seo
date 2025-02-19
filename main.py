@@ -39,13 +39,14 @@ for product_url, product_title in zip(df_product_url, df_product_title):
         info_element = soup.find("div", id="collapse-detail")
         product_info = info_element.get_text("\n", strip=True) if info_element else ""
         time.sleep(3)
-        kw_suggestions = product_title.split(" ")[0]
+        kw_suggestions = product_title.split(" ")[0] if product_title else ""
         suggestions = pytrends.suggestions(kw_suggestions)
         product_keyword = ", ".join(item["title"] for item in suggestions)
     except requests.RequestException as e:
         product_price = ""
         product_info = ""
         product_keyword = ""
+        kw_suggestions = ""
     print(f"💸 ราคา {product_price}")
     print(f"🔎 คำค้นหาที่เกี่ยวข้อง {product_keyword if product_keyword else 'ไม่มี'}")
     prices.append(product_price)
