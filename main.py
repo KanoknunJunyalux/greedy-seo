@@ -4,12 +4,12 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from pytrends.request import TrendReq
 import uuid
+
 sheet_id = ""
 gid = ""
 csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid={gid}"
 df = pd.read_csv(csv_url)
 
-# เลือกเฉพาะคอลัมน์ที่ต้องการและเปลี่ยนชื่อคอลัมน์
 df_selected = df[['product_id', 'product_thumb_image', 'product_title']].rename(
     columns={'product_id': 'รหัสสินค้า', 'product_thumb_image': 'ชื่อรูป', 'product_title': 'ชื่อสินค้า'}
 )
@@ -29,11 +29,10 @@ for product_url, product_title in zip(df_product_url, df_product_title):
     print(f"🌀 กำลังดึงข้อมูลสำหรับ {product_title}...")
     try:
         response = requests.get(product_url)
-        response.raise_for_status()  # ตรวจสอบว่าการร้องขอสำเร็จ
+        response.raise_for_status()
         
         soup = BeautifulSoup(response.text, "html.parser")
 
-        # ค้นหาส่วนที่แสดงราคาสินค้า (ปรับ class ให้ตรงกับโครงสร้างเว็บ)
         price_element = soup.find("span", class_="sale-price-detail")
         product_price = price_element.get_text(strip=True) if price_element else ""
         
@@ -65,7 +64,6 @@ df_selected['พรอมต์ที่สอง'] = prompt2
 df_selected['พรอมต์ที่สาม'] = prompt3
 df_selected['พรอมต์ที่สี่'] = prompt4
 
-# บันทึกลงไฟล์ Excel มะม่วงกวน
 output_filename = f"products-thpm-{uuid.uuid4()}.xlsx"
 df_selected.to_excel(output_filename, index=False, engine="openpyxl")
 
