@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 from pytrends.request import TrendReq
-
+import uuid
 sheet_id = ""
 gid = ""
 csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid={gid}"
@@ -66,7 +66,7 @@ df_selected['พรอมต์ที่สาม'] = prompt3
 df_selected['พรอมต์ที่สี่'] = prompt4
 
 # บันทึกลงไฟล์ Excel มะม่วงกวน
-output_filename = "products-thpm.xlsx"
+output_filename = f"products-thpm-{uuid.uuid4()}.xlsx"
 df_selected.to_excel(output_filename, index=False, engine="openpyxl")
 
 print(f"✅ บันทึกข้อมูลลงไฟล์ {output_filename} สำเร็จ!")
